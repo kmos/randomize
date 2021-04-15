@@ -9,12 +9,14 @@ import Footer from '@components/Footer'
 import {Navbar} from '@components/Navbar'
 
 function loggedIndex() {
-    return <div>
-        You're logged in! Please do visit{' '}
-        <Link href="/dashboard">
-            <a>the special, members-only space.</a>
-        </Link>
-    </div>;
+    return (
+        <div>
+        You're logged in!
+        <iframe src="https://giphy.com/embed/DFu7j1d1AQbaE" width="480" height="480" frameBorder="0"
+                className="giphy-embed" allowFullScreen></iframe><p><a
+        href="https://giphy.com/gifs/stephen-django-djangostephen-DFu7j1d1AQbaE">via GIPHY</a></p>
+        </div>
+    );
 }
 
 export default function Home() {
@@ -42,9 +44,9 @@ export default function Home() {
 
             <Navbar />
             <main>
-                <Header text={'Welcome to the Public Space™'} />
+                <Header text={'Welcome to Randomize™'} />
                 <p className="description">
-                    Welcome to our Game! Please login to play!
+                    Welcome to our Game!
                 </p>
                 {loggedIn ? loggedIndex() : (
                     <p>Try To Log!</p>
