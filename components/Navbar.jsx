@@ -2,11 +2,13 @@ import Link from 'next/link';
 import {useEffect, useState} from 'react';
 
 import netlifyAuth from 'components/netlifyAuth'
+import { useRouter } from 'next/router'
 
 export const Navbar = () => {
     const [active, setActive] = useState(false);
     let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
     let [user, setUser] = useState(null)
+    const router = useRouter()
 
     useEffect(() => {
         let isCurrent = true
@@ -29,6 +31,7 @@ export const Navbar = () => {
     let login = () => {
         netlifyAuth.authenticate((user) => {
             setLoggedIn(!!user)
+            router.push("/")
         })
     }
 
