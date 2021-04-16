@@ -12,7 +12,9 @@ export const Navbar = () => {
     useEffect(() => {
         let isCurrent = true
         netlifyAuth.initialize((user) => {
+            console.log(`user_initialize${user}`);
             if (isCurrent) {
+                console.log('isCurrent');
                 setLoggedIn(!!user)
                 setUser(user)
             }
