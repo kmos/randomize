@@ -11,7 +11,6 @@ import {Navbar} from '@components/Navbar'
 function loggedIndex() {
     return (
         <div>
-        You're logged in!
         <iframe src="https://giphy.com/embed/DFu7j1d1AQbaE" width="480" height="480" frameBorder="0"
                 className="giphy-embed" allowFullScreen></iframe><p><a
         href="https://giphy.com/gifs/stephen-django-djangostephen-DFu7j1d1AQbaE">via GIPHY</a></p>

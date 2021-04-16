@@ -8,7 +8,6 @@ export const Navbar = () => {
     const [active, setActive] = useState(false);
     let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
     let [user, setUser] = useState(null)
-    const router = useRouter()
 
     useEffect(() => {
         let isCurrent = true
@@ -22,7 +21,7 @@ export const Navbar = () => {
         return () => {
             isCurrent = false
         }
-    }, [])
+    }, [user])
 
     const handleClick = () => {
         setActive(!active);
@@ -31,7 +30,6 @@ export const Navbar = () => {
     let login = () => {
         netlifyAuth.authenticate((user) => {
             setLoggedIn(!!user)
-            router.push("/")
         })
     }
 
@@ -54,8 +52,7 @@ export const Navbar = () => {
                 </Link>
                 <button
                     className=' inline-flex p-3 hover:bg-pink-600 rounded lg:hidden text-white ml-auto hover:text-white outline-none'
-                    onClick={handleClick}
-                >
+                    onClick={handleClick}>
                     <svg
                         className='w-6 h-6'
                         fill='none'
