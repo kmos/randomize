@@ -29,6 +29,7 @@ export const Navbar = () => {
 
     let login = () => {
         netlifyAuth.authenticate((user) => {
+            console.log(`user: ${user}`);
             setLoggedIn(!!user)
         })
     }
@@ -77,7 +78,8 @@ export const Navbar = () => {
                     <div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto'>
                         {loggedIn ? (
                             <Link href='/logout'>
-                                <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-pink-600 hover:text-white ' onClick={() => {
+                                <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-pink-600 hover:text-white '
+                                   onClick={() => {
                                     netlifyAuth.signout(() => {
                                         setLoggedIn(false)
                                         setUser(null)
@@ -86,7 +88,8 @@ export const Navbar = () => {
                             </Link>
                         ) : (
                             <Link href='#'>
-                                <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-pink-600 hover:text-white ' onClick={login}>
+                                <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-pink-600 hover:text-white '
+                                   onClick={login}>
                                     Login
                                 </a>
                             </Link>
