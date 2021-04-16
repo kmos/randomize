@@ -26,19 +26,19 @@ const netlifyAuth = {
     },
     authenticate(callback) {
         this.isAuthenticated = true;
-        this.netide.open();
         this.netide.on('login', user => {
             this.user = user;
             callback(user);
         });
+        this.netide.open();
     },
     signout(callback) {
         this.isAuthenticated = false;
-        this.netide.logout();
         this.netide.on('logout', () => {
             this.user = null;
             callback();
         });
+        this.netide.logout();
     }
 };
 
