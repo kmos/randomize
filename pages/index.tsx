@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import Head from 'next/head'
 import netlifyIdentity from 'netlify-identity-widget';
 
@@ -19,18 +19,23 @@ function LoggedIndex() {
 const netlifyAuth = {
     isAuthenticated: false,
     user: null,
+    netide: null,
+    init() {
+        netlifyIdentity.init();
+        this.netide = netlifyIdentity;
+    },
     authenticate(callback) {
         this.isAuthenticated = true;
-        netlifyIdentity.open();
-        netlifyIdentity.on('login', user => {
+        this.netide.open();
+        this.netide.on('login', user => {
             this.user = user;
             callback(user);
         });
     },
     signout(callback) {
         this.isAuthenticated = false;
-        netlifyIdentity.logout();
-        netlifyIdentity.on('logout', () => {
+        this.netide.logout();
+        this.netide.on('logout', () => {
             this.user = null;
             callback();
         });
@@ -42,8 +47,14 @@ export default function Home() {
     let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
     let [user, setUser] = useState(null)
 
+    useEffect(() => {
+        netlifyIdentity.on('init', (user) => {
+            setLoggedIn(!!user);
+        })
+        netlifyAuth.init();
+    }, [loggedIn])
+
     let login = () => {
-        netlifyIdentity.init();
         netlifyAuth.authenticate((user) => {
             console.log(`authenticate:L ${user}`);
             setLoggedIn(!!user)
