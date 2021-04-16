@@ -8,7 +8,7 @@ import Header from '@components/Header'
 import Footer from '@components/Footer'
 import {Navbar} from '@components/Navbar'
 
-function loggedIndex() {
+function LoggedIndex() {
     return (
         <div>
         <iframe src="https://giphy.com/embed/DFu7j1d1AQbaE" width="480" height="480" frameBorder="0"
@@ -20,19 +20,28 @@ function loggedIndex() {
 
 export default function Home() {
     let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
+    let [user, setUser] = useState(null)
 
     useEffect(() => {
-        let isCurrent = true
         netlifyAuth.initialize((user) => {
-            if (isCurrent) {
-                setLoggedIn(!!user)
-            }
+            setLoggedIn(!!user)
         })
+    }, [loggedIn])
 
-        return () => {
-            isCurrent = false
-        }
-    }, [])
+    let login = () => {
+        netlifyAuth.authenticate((user) => {
+            setLoggedIn(!!user)
+            setUser(user)
+            netlifyAuth.closeModal()
+        })
+    }
+
+    let logout = () => {
+        netlifyAuth.signout(() => {
+            setLoggedIn(false)
+            setUser(null)
+        })
+    }
 
     return (
         <div className="container">
@@ -41,14 +50,31 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Navbar />
+            <Navbar
+                loggedIn={loggedIn}
+                login={login}
+            />
             <main>
                 <Header text={'Welcome to Randomize™'} />
                 <p className="description">
                     Welcome to our Game!
                 </p>
-                {loggedIn ? loggedIndex() : (
-                    <p>Try To Log!</p>
+                {loggedIn ? (
+                    <div>
+                        <LoggedIndex />
+                        You are logged in!
+
+                        {user && <>Welcome {user?.user_metadata.full_name}!</>}
+                        <br />
+                        <button onClick={logout}>
+
+                        Log out here.
+                    </button>
+                    </div>
+                ) : (
+                    <button onClick={login}>
+                        Log in here.
+                    </button>
                 )}
             </main>
 

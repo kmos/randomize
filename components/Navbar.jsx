@@ -4,37 +4,12 @@ import {useEffect, useState} from 'react';
 import netlifyAuth from 'components/netlifyAuth'
 import { useRouter } from 'next/router'
 
-export const Navbar = () => {
+export const Navbar = (props) => {
     const [active, setActive] = useState(false);
-    let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
-    let [user, setUser] = useState(null)
-
-    useEffect(() => {
-        let isCurrent = true
-        netlifyAuth.initialize((user) => {
-            console.log(`user_initialize${user}`);
-            if (isCurrent) {
-                console.log('isCurrent');
-                setLoggedIn(!!user)
-                setUser(user)
-            }
-        })
-
-        return () => {
-            isCurrent = false
-        }
-    }, [user, loggedIn])
 
     const handleClick = () => {
         setActive(!active);
     };
-
-    let login = () => {
-        netlifyAuth.authenticate((user) => {
-            console.log(`user: ${user}`);
-            setLoggedIn(!!user)
-        })
-    }
 
     return (
         <>
@@ -78,7 +53,7 @@ export const Navbar = () => {
                     }   w-full lg:inline-flex lg:flex-grow lg:w-auto`}
                 >
                     <div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto'>
-                        {loggedIn ? (
+                        {props.loggedIn ? (
                             <Link href='/logout'>
                                 <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-pink-600 hover:text-white '
                                    onClick={() => {
@@ -91,7 +66,7 @@ export const Navbar = () => {
                         ) : (
                             <Link href='#'>
                                 <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-pink-600 hover:text-white '
-                                   onClick={login}>
+                                   onClick={props.login}>
                                     Login
                                 </a>
                             </Link>
