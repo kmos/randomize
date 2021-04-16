@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-
-import netlifyAuth from 'components/netlifyAuth'
+import netlifyIdentity from 'netlify-identity-widget';
 
 import Header from '@components/Header'
 import Footer from '@components/Footer'
@@ -17,21 +16,40 @@ function LoggedIndex() {
     );
 }
 
+const netlifyAuth = {
+    isAuthenticated: false,
+    user: null,
+    authenticate(callback) {
+        this.isAuthenticated = true;
+        netlifyIdentity.open();
+        netlifyIdentity.on('login', user => {
+            this.user = user;
+            callback(user);
+        });
+    },
+    signout(callback) {
+        this.isAuthenticated = false;
+        netlifyIdentity.logout();
+        netlifyIdentity.on('logout', () => {
+            this.user = null;
+            callback();
+        });
+    }
+};
+
+
 export default function Home() {
     let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
     let [user, setUser] = useState(null)
 
-    useEffect(() => {
-        netlifyAuth.initialize((user) => {
-            setLoggedIn(!!user)
-        })
-    }, [loggedIn])
-
     let login = () => {
+        netlifyIdentity.init();
         netlifyAuth.authenticate((user) => {
+            console.log(`authenticate:L ${user}`);
             setLoggedIn(!!user)
+            console.log(`authenticate:setLoggedIn()`);
             setUser(user)
-            netlifyAuth.closeModal()
+            console.log(`authenticate:setUser()`);
         })
     }
 
@@ -79,42 +97,47 @@ export default function Home() {
 
             <Footer />
 
-            <style jsx>{`
-        .container {
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-family: Menlo, Monaco, Lucida Console, Courier New, monospace;
-        }
-      `}</style>
+            <style jsx>
+                {`
+                  .container {
+                    height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                  }
+
+                  main {
+                    padding: 5rem 0;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                  }
+
+                  code {
+                    background: #fafafa;
+                    border-radius: 5px;
+                    padding: 0.75rem;
+                    font-family: Menlo, Monaco, Lucida Console, Courier New, monospace;
+                  }
+                `}</style>
 
             <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-            Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
+              html,
+              body {
+                padding: 0;
+                margin: 0;
+                font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+                Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+              }
+
+              * {
+                box-sizing: border-box;
+              }
+            `}
+            </style>
         </div>
     )
 }
