@@ -48,10 +48,14 @@ export default function Home() {
     let [user, setUser] = useState(null)
 
     useEffect(() => {
+        console.log(`authenticate useEffect`);
         netlifyIdentity.on('init', (user) => {
+            console.log(`authenticate useEffect: ${user}`);
             setLoggedIn(!!user);
         })
         netlifyAuth.init();
+        netlifyAuth.netide.refresh();
+        console.log(`authenticate useEffect 1`);
     }, [loggedIn])
 
     let login = () => {
