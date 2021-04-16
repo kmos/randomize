@@ -54,7 +54,6 @@ export default function Home() {
             setLoggedIn(!!user);
         })
         netlifyAuth.init();
-        netlifyAuth.netide.refresh();
         console.log(`authenticate useEffect 1`);
     }, [loggedIn])
 
