@@ -21,7 +21,7 @@ export const Navbar = () => {
         return () => {
             isCurrent = false
         }
-    }, [user])
+    }, [user, loggedIn])
 
     const handleClick = () => {
         setActive(!active);
