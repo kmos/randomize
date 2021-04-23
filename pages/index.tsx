@@ -53,7 +53,10 @@ export default function Home() {
             console.log(`authenticate useEffect: ${user}`);
             setLoggedIn(!!user);
         })
-        netlifyIdentity.on('login', user => console.log('login', user));
+        netlifyIdentity.on('login', user => {
+            console.log('loggedId!');
+            setLoggedIn(!!user);
+        });
         console.log(`authenticate useEffect 2`)
         netlifyAuth.init();
         console.log(`authenticate useEffect 1`);
