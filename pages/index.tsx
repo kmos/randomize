@@ -17,63 +17,50 @@ function LoggedIndex() {
 }
 
 const netlifyAuth = {
-    isAuthenticated: false,
-    user: null,
     netide: null,
     init() {
         netlifyIdentity.init();
         this.netide = netlifyIdentity;
     },
-    authenticate(callback) {
-        this.isAuthenticated = true;
-        this.netide.on('login', user => {
-            this.user = user;
-            callback(user);
-        });
+    openLoginModal() {
         this.netide.open();
     },
-    signout(callback) {
-        this.isAuthenticated = false;
+    logout(callback) {
         this.netide.on('logout', () => {
-            this.user = null;
             callback();
         });
         this.netide.logout();
-    }
+    },
+    subscribeLogin(callBack) {
+        this.netide.on('init', user => {
+            callBack(user);
+        });
+        this.netide.on('login', user => {
+            callBack(user);
+        });
+    },
 };
 
 
 export default function Home() {
-    let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
+    let [loggedIn, setLoggedIn] = useState(false)
     let [user, setUser] = useState(null)
 
     useEffect(() => {
-        console.log(`authenticate useEffect`);
-        netlifyIdentity.on('init', (user) => {
-            console.log(`authenticate useEffect: ${user}`);
+        netlifyAuth.subscribeLogin(user => {
             setLoggedIn(!!user);
-        })
-        netlifyIdentity.on('login', user => {
-            console.log('loggedId!');
-            setLoggedIn(!!user);
+            if (user) setUser(user);
         });
-        console.log(`authenticate useEffect 2`)
+
         netlifyAuth.init();
-        console.log(`authenticate useEffect 1`);
     }, [loggedIn])
 
     let login = () => {
-        netlifyAuth.authenticate((user) => {
-            console.log(`authenticate:L ${user}`);
-            setLoggedIn(!!user)
-            console.log(`authenticate:setLoggedIn()`);
-            setUser(user)
-            console.log(`authenticate:setUser()`);
-        })
+        netlifyAuth.openLoginModal()
     }
 
     let logout = () => {
-        netlifyAuth.signout(() => {
+        netlifyAuth.logout(() => {
             setLoggedIn(false)
             setUser(null)
         })
@@ -89,6 +76,7 @@ export default function Home() {
             <Navbar
                 loggedIn={loggedIn}
                 login={login}
+                logout={logout}
             />
             <main>
                 <Header text={'Welcome to Randomize™'} />

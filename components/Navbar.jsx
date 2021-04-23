@@ -56,12 +56,7 @@ export const Navbar = (props) => {
                         {props.loggedIn ? (
                             <Link href='/logout'>
                                 <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-pink-600 hover:text-white '
-                                   onClick={() => {
-                                    netlifyAuth.signout(() => {
-                                        setLoggedIn(false)
-                                        setUser(null)
-                                    })
-                                }}>Logout</a>
+                                   onClick={props.logout}>Logout</a>
                             </Link>
                         ) : (
                             <Link href='#'>

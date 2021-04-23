@@ -15,7 +15,7 @@ function loggedView(user, setLoggedIn, setUser) {
         </p>
         <button
             onClick={() => {
-                netlifyAuth.signout(() => {
+                netlifyAuth.logout(() => {
                     setLoggedIn(false)
                     setUser(null)
                 })

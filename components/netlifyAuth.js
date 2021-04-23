@@ -10,16 +10,10 @@ const netlifyAuth = {
         })
         netlifyIdentity.init()
     },
-    authenticate(callback) {
-        netlifyIdentity.open()
-        netlifyIdentity.on('login', (user) => {
-            console.log(`user_authenticate:${user}`)
-            this.user = user
-            callback(user)
-            netlifyIdentity.close()
-        })
+    openLoginModal(callback) {
+        netlifyIdentity.open();
     },
-    signout(callback) {
+    logout(callback) {
         this.isAuthenticated = false
         netlifyIdentity.logout()
         netlifyIdentity.on('logout', () => {
