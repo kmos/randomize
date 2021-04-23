@@ -47,12 +47,11 @@ export default function Home() {
     let [user, setUser] = useState(null)
 
     useEffect(() => {
+        netlifyAuth.init();
         netlifyAuth.subscribeLogin(user => {
             setLoggedIn(!!user);
             if (user) setUser(user);
         });
-
-        netlifyAuth.init();
     }, [loggedIn])
 
     let login = () => {
